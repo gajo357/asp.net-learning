@@ -1,6 +1,4 @@
 ﻿using ComicBooksLibrary.Data;
-using ComicBooksLibrary.Models;
-using System;
 using System.Web.Mvc;
 
 namespace ComicBooksLibrary.Controllers
@@ -9,9 +7,9 @@ namespace ComicBooksLibrary.Controllers
     {
         private ComicBookRepository _comicBookRepository = null;
 
-        public ComicBooksController()
+        public ComicBooksController(ComicBookRepository repository)
         {
-            _comicBookRepository = new ComicBookRepository();
+            _comicBookRepository = repository;
         }
 
         public ActionResult Index()
