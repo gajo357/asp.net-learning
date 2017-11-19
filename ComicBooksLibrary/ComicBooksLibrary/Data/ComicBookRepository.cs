@@ -1,4 +1,5 @@
 ﻿using ComicBooksLibrary.Models;
+using System.Collections.Generic;
 
 namespace ComicBooksLibrary.Data
 {
@@ -69,6 +70,11 @@ namespace ComicBooksLibrary.Data
             }
 
             return comicBookToReturn;
+        }
+
+        public ComicBook[] GetComicBooks()
+        {
+            return _comicBooks;
         }
     }
 }
