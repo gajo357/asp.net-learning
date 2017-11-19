@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -39,14 +40,23 @@ namespace Treehouse.FitnessFrog.Controllers
 
         public ActionResult Add()
         {
-            return View();
+            var entry = new Entry() { Date = DateTime.Today };
+
+            return View(entry);
         }
 
         [ActionName(nameof(Add))]
         [HttpPost]
-        public ActionResult AddPost()
+        public ActionResult AddPost(Entry entry)
         {
-            return View();
+            if(ModelState.IsValid)
+            {
+                _entriesRepository.AddEntry(entry);
+
+                //return View();
+            }
+
+            return View(entry);
         }
 
         public ActionResult Edit(int? id)
