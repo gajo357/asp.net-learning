@@ -1,12 +1,18 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace ComicBooksLibrary.Controllers
 {
     public class ComicBooksController : Controller
     {
-        public string Details()
+        public ActionResult Details()
         {
-            return "Hello from Details ASP.NET";
+            if(DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+            {
+                return Redirect("/");
+            }
+
+            return Content("Hello from Details ASP.NET");
         }
     }
 }
