@@ -74,6 +74,7 @@ namespace Treehouse.FitnessFrog.Models
         /// <summary>
         /// The duration for the entry (in minutes).
         /// </summary>
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than 0.")]
         public double Duration { get; set; }
 
         /// <summary>
@@ -89,6 +90,7 @@ namespace Treehouse.FitnessFrog.Models
         /// <summary>
         /// The notes for the entry.
         /// </summary>
+        [MaxLength(200, ErrorMessage = "The Notes field cannot be longer than 200 characters")]
         public string Notes { get; set; }
     }
 }
