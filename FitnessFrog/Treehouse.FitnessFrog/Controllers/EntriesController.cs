@@ -58,6 +58,7 @@ namespace Treehouse.FitnessFrog.Controllers
             {
                 _entriesRepository.AddEntry(entry);
 
+                SetTempDataMessage("Your data was successfully added!");
                 return RedirectToAction(nameof(Index));
             }
 
@@ -91,6 +92,7 @@ namespace Treehouse.FitnessFrog.Controllers
             {
                 _entriesRepository.UpdateEntry(entry);
 
+                SetTempDataMessage("Your data was successfully edited!");
                 return RedirectToAction(nameof(Index));
             }
 
@@ -122,7 +124,13 @@ namespace Treehouse.FitnessFrog.Controllers
         {
             _entriesRepository.DeleteEntry(id);
 
+            SetTempDataMessage("Your data was successfully deleted!");
             return RedirectToAction(nameof(Index));
+        }
+
+        private void SetTempDataMessage(string message)
+        {
+            TempData["Message"] = message;
         }
 
         private void SelectActivitiesList()
