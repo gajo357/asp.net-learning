@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Start">
+
+	<!-- Variables -->
+	<PropertyGroup>
+
+		<!-- Project Name -->
+		<ProjectName>IssueTracker</ProjectName>
+
+		<!-- Test Project Name -->
+		<TestProjectName>$(ProjectName)Tests</TestProjectName>
+
+		<!-- Shared Project Name -->
+		<SharedProjectName>$(ProjectName)Shared</SharedProjectName>
+
+		<!-- Source Code Folder -->
+		<SourceDir>src</SourceDir>
+
+		<!-- Files Folder -->
+		<FilesDir>files</FilesDir>
+
+		<!-- Zip File Name -->
+		<ZipFileName>project</ZipFileName>
+
+    <!-- Message Line Separator -->
+    <MessageLineSeparator>%0a---------------------------------------------------%0a</MessageLineSeparator>
+		
+	</PropertyGroup>
+
+	<UsingTask
+    AssemblyFile="$(SourceDir)\packages\xunit.runner.msbuild.2.2.0\build\net452\xunit.runner.msbuild.dll"
+    TaskName="Xunit.Runner.MSBuild.xunit"/>
+
+	<Import 
+		Project="$(SourceDir)\packages\MSBuildTasks.1.5.0.235\tools\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="Start" DependsOnTargets="PreCleanup;Build;Test;CopyFiles;Zip;PostCleanup">
+	</Target>
+
+	<Target Name="PreCleanup">
+		<RemoveDir Directories="$(FilesDir)"/>
+		<Delete Files="$(ZipFileName).zip"/>
+	</Target>
+
+	<Target Name="PostCleanup">
+		<RemoveDir Directories="$(FilesDir)"/>
+	</Target>
+
+	<Target Name="Build">
+    <Message Text="$(MessageLineSeparator)Building the solution...$(MessageLineSeparator)" Importance="high"/>
+		<MSBuild Projects="$(SourceDir)\$(ProjectName).sln" Properties="Configuration=Release"/>
+	</Target>
+
+  <Target Name="Test">
+    <Message Text="$(MessageLineSeparator)Running unit tests...$(MessageLineSeparator)" Importance="high"/>
+    <xunit Assemblies="$(SourceDir)\$(TestProjectName)\bin\Release\$(TestProjectName).dll" />
+  </Target>
+
+	<Target Name="CopyFiles">
+    <Message Text="$(MessageLineSeparator)Copying files..." Importance="high"/>
+		<MakeDir Directories="$(FilesDir)"/>
+		<ItemGroup>
+			<Files
+				Include=".\**\*.*"
+				Exclude=".\$(SourceDir)\.vs\**\*.*;.\$(SourceDir)\packages\**\*.*;.\$(SourceDir)\$(ProjectName)\node_modules\**\*.*;.\$(SourceDir)\$(ProjectName)\bin\**\*.*;.\$(SourceDir)\$(ProjectName)\obj\**\*.*;.\$(SourceDir)\$(SharedProjectName)\bin\**\*.*;.\$(SourceDir)\$(SharedProjectName)\obj\**\*.*;.\$(SourceDir)\$(TestProjectName)\bin\**\*.*;.\$(SourceDir)\$(TestProjectName)\obj\**\*.*">
+			</Files>
+		</ItemGroup>
+		<Copy SourceFiles="@(Files)" DestinationFolder="$(FilesDir)\%(RecursiveDir)"/>
+	</Target>
+	
+	<Target Name="Zip">
+    <Message Text="Creating ZIP file...$(MessageLineSeparator)" Importance="high"/>
+		<CreateItem Include="$(FilesDir)\**\*.*" >
+			<Output ItemName="ZipFiles" TaskParameter="Include"/>
+		</CreateItem>
+		<Zip ZipFileName="$(ZipFileName).zip" WorkingDirectory="$(FilesDir)" Files="@(ZipFiles)" />
+	</Target>
+
+</Project>
