@@ -33,6 +33,9 @@ namespace Treehouse.FitnessFrog.Spa.Controllers
         [HttpPost]
         public IHttpActionResult Post(Entry entry)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             _entriesRepository.Add(entry);
 
             return Created(
