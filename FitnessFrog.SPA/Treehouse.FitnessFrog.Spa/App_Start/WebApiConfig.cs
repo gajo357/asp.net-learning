@@ -5,6 +5,7 @@ namespace Treehouse.FitnessFrog.Spa
 {
     public static class WebApiConfig
     {
+        public const string DefaultApiName = "DefaultApi";
         public static void Register(HttpConfiguration config)
         {
             var jsonSeriealizerSettings = config.Formatters.JsonFormatter.SerializerSettings;
@@ -12,7 +13,7 @@ namespace Treehouse.FitnessFrog.Spa
             jsonSeriealizerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             config.Routes.MapHttpRoute(
-                name: "DefaulApi",
+                name: DefaultApiName,
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional });
         }
