@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Treehouse.FitnessFrog.Shared.Data;
 using Treehouse.FitnessFrog.Shared.Models;
@@ -18,21 +15,29 @@ namespace Treehouse.FitnessFrog.Spa.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Entry> Get()
+        public IHttpActionResult Get()
         {
-            return _entriesRepository.GetList();
+            return Ok(_entriesRepository.GetList());
         }
 
         [HttpGet]
-        public Entry Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return _entriesRepository.Get(id);
+            var entry = _entriesRepository.Get(id);
+            if (entry == null)
+                return NotFound();
+
+            return Ok(entry);
         }
 
         [HttpPost]
-        public void Post(Entry entry)
+        public IHttpActionResult Post(Entry entry)
         {
-            _entriesRepository.Add(entry);             
+            _entriesRepository.Add(entry);
+
+            return Created(
+                Url.Link("DefaultApi", new { controller = "Entries", id = entry.Id }),
+                entry);
         }
 
         [HttpPut]
