@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Treehouse.FitnessFrog.Shared.Data;
 using Treehouse.FitnessFrog.Shared.Models;
 
 namespace Treehouse.FitnessFrog.Spa.Controllers
 {
     public class EntriesController : ApiController
     {
+        private readonly EntriesRepository _entriesRepository;
+
+        public EntriesController(EntriesRepository entriesRepository)
+        {
+            _entriesRepository = entriesRepository;
+        }
+
         [HttpGet]
         public IEnumerable<Entry> Get()
         {
